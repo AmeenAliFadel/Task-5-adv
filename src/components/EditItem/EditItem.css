@@ -1,0 +1,46 @@
+.custom-upload-box-edit {
+    height: 208px;
+}
+
+.preview-image {
+    width: 208px;
+    height: 100%;
+}
+
+.price-input {
+    margin-top: 5rem;
+}
+
+.edit-page .form-label {
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(108, 108, 108, 1);
+}
+.loading-container {
+    height: 70vh;
+}
+
+.custom-spinner {
+    width: 3rem;
+    height: 3rem;
+    border-color: rgba(254, 175, 0, 0.2);
+    border-top-color: rgba(254, 175, 0, 1);
+}
+.Af-add-button {
+  color: #fff;
+  transition: background-color 0.3s ease;
+}
+
+.Af-add-button:hover {
+    background-color: rgb(205, 141, 2);
+}
+
+.Af-add-button:active,
+.Af-add-button:focus {
+  background-color: rgb(205, 141, 3) !important;
+  box-shadow: none !important;
+  border-color: transparent;
+  outline: none;
+}

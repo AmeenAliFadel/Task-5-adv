@@ -1,0 +1,43 @@
+.add-item .goback-btn {
+    border: 1px solid rgba(0, 0, 0, 1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 1);
+}
+
+.add-item .goback-btn:hover {
+    border: 1px solid rgba(0, 0, 0, 1) !important;
+}
+
+.add-item h2 {
+    font-weight: 600;
+    font-size: 60px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 1);
+    margin-top: 36px;
+
+}
+.Af-add-button{
+     background: rgba(254, 175, 0, 1);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+    padding: 11px 0;
+    width: 200px;
+}
+.price-input {
+    margin-top: 5rem;
+}
+
+.add-page .form-label {
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(108, 108, 108, 1);
+}

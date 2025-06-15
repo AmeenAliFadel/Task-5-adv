@@ -1,0 +1,80 @@
+.form {
+    background: linear-gradient(71.17deg, #FEAF00 19.35%, #F8D442 90.12%);
+    height: 100vh;
+}
+
+.Af-form-container {
+    width: 476px;
+    padding: 42px 30px;
+    box-shadow: 2px 5px 10px 0px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+
+    h1 {
+
+        padding-top: 43px;
+    }
+}
+
+.Af-form-button {
+    font-size: 13px;
+    line-height: 100%;
+    letter-spacing: 0%;
+}
+
+.form-control {
+    font-weight: 400;
+    line-height: 100%;
+    letter-spacing: 0%;
+
+}
+
+.form-control:focus {
+    border-color: #F8D442 !important;
+    box-shadow: 0 0 0 .25rem #ffeeab;
+}
+
+.custom-upload-box {
+    width: 120px;
+    height: 120px;
+    border: 1px dashed rgba(56, 78, 183, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    background-color: #fcfcfc;
+    transition: 0.3s ease;
+}
+
+.custom-upload-box:hover {
+    background-color: #fff6e0;
+}
+
+.upload-icon {
+    width: 40px;
+    height: 40px;
+    opacity: 0.6;
+}
+
+.preview-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 8px;
+}
+
+.loading-container {
+    height: 70vh;
+}
+
+.custom-spinner {
+    width: 3rem;
+    height: 3rem;
+    border-color: rgba(254, 175, 0, 0.2);
+    border-top-color: rgba(254, 175, 0, 1);
+}
+
+.toast-container {
+    z-index: 9999 !important;
+    position: fixed !important;
+    top: 20;
+    left: 50%;
+    transform: translateX(-50%);
+}

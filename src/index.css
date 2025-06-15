@@ -1,0 +1,133 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+  font-family: "Montserrat", sans-serif !important;
+}
+
+.btn-primary {
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: rgb(205, 140, 0) !important;
+  --bs-btn-hover-border-color: 1px solid rgba(254, 175, 0, 1) !important;
+}
+
+.sidebar {
+  width: 240px;
+  height: 100vh;
+  position: fixed;
+  left: 0;
+  top: 0;
+  background: rgba(242, 234, 225, 1);
+  border-right: 1px solid #ddd;
+  transition: transform 0.3s ease-in-out;
+  z-index: 999;
+}
+
+.sidebar.hide {
+  transform: translateX(-100%);
+}
+
+.sidebar.show {
+  transform: translateX(0);
+}
+
+.sidebarLogo {
+  border-left: 4px solid rgba(248, 212, 66, 1);
+  width: 97px;
+  padding-left: 12px;
+  margin: 0 auto;
+  margin-top: 35px;
+  display: block;
+}
+
+.profileImage {
+  width: 141px;
+  height: 141px;
+}
+
+.sidebar h4 {
+  font-weight: 700;
+  font-size: 17px;
+  line-height: 100%;
+  letter-spacing: 0%;
+  color: rgba(0, 0, 0, 1);
+}
+
+.sidebar .nav a {
+  color: black;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 100%;
+  letter-spacing: 0%;
+}
+
+.sidebar .nav a.active {
+  background: rgba(254, 175, 0, 1);
+  border-radius: 4px;
+}
+.toggle-sidebar-btn {
+  background-color: rgba(254, 175, 0, 1);
+  color: white;
+  font-size: 24px;
+  border-radius: 8px;
+  padding: 4px 12px;
+  border: 1px solid #e0e0e0 !important; /* ✅ أضف هذا السطر للبوردر */
+  transition: all 0.3s ease;
+}
+
+.toggle-sidebar-btn:hover {
+  background-color: rgba(230, 150, 0, 1);
+  border-color: rgba(230, 150, 0, 1); /* ✅ لتغيير لون البوردر مع الهوفر */
+}
+
+.toggle-sidebar-btn.open {
+  background-color: rgba(200, 80, 80, 1);
+  border-color: rgba(200, 80, 80, 1); /* ✅ لون البوردر عند الفتح */
+}
+
+.route-outlet {
+  width: 100%;
+  margin-left: 0;
+
+  transition: margin-left 0.3s ease-in-out;
+}
+
+.toggle-sidebar-btn {
+  font-size: 24px;
+  background: none;
+  border: none;
+  position: fixed;
+  top: 15px;
+  left: 15px;
+  z-index: 1000;
+}
+
+.aother-pages {
+  height: 70vh;
+  color: #666;
+}
+
+.aother-pages-spinner {
+  width: 4rem;
+  height: 4rem;
+}
+
+@media (min-width: 992px) {
+  .sidebar {
+    transform: translateX(0) !important;
+  }
+
+  .toggle-sidebar-btn {
+    display: none;
+  }
+
+  .route-outlet {
+    width: calc(100% - 240px);
+    margin-left: 240px;
+  }
+}
+
+@media (max-width:992px) {
+  .route-outlet {
+    margin-top: 40px;
+  }
+}

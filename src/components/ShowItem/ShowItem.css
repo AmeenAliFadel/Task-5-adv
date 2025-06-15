@@ -1,0 +1,40 @@
+.show-img {
+
+
+    width: 373px;
+    height: 373px;
+
+}
+
+.show-row2,.show-row3 {
+    h3 {
+        font-weight: 600;
+        font-size: 60px;
+        line-height: 100%;
+        letter-spacing: 0%;
+        text-transform: capitalize;
+        color: rgba(0, 0, 0, 1);
+
+
+        span {
+            font-family: Montserrat;
+            font-weight: 500;
+            font-size: 40px;
+            line-height: 100%;
+            letter-spacing: 0%;
+            text-transform: capitalize;
+            color: var(--miscellaneous-alert-menu-action-sheet-separators, rgba(128, 128, 128, 0.55));
+            margin-left: 24px;
+        }
+    }
+}
+.loading-container {
+    height: 70vh;
+}
+
+.custom-spinner {
+    width: 3rem;
+    height: 3rem;
+    border-color: rgba(254, 175, 0, 0.2);
+    border-top-color: rgba(254, 175, 0, 1);
+}

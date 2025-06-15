@@ -1,0 +1,231 @@
+.search-box {
+    max-width: 664px !important;
+
+    .form-control:focus {
+        box-shadow: none;
+    }
+}
+
+
+
+.add-btn:hover {
+    background-color: rgb(205, 141, 2);
+    color: #fff;
+}
+
+.add-btn:active,
+.add-btn:focus {
+    background-color: rgb(205, 141, 3) !important;
+    box-shadow: none !important;
+    border-color: transparent;
+    outline: none;
+    color: #fff;
+}
+
+.all-items {
+    gap: 40px;
+}
+
+.item-card {
+    width: 14.444%;
+    height: 208px;
+    min-width: 208px;
+    box-shadow: 8px 8px 4px 0px rgba(0, 0, 0, 0.25);
+    overflow: hidden;
+    position: relative;
+
+    img {
+        object-fit: cover;
+        z-index: 2;
+    }
+}
+
+.overlay {
+    position: absolute;
+    z-index: 10;
+    top: 0;
+    left: 0;
+    background: rgba(242, 234, 225, 0.7);
+    color: rgba(0, 0, 0, 1);
+    gap: 10px;
+    opacity: 0;
+    padding: 10px;
+    transition: opacity 0.3s ease-in-out;
+
+    .buttons {
+        gap: 20px;
+
+        .btn {
+            width: 81px;
+        }
+
+        .delete-btn {
+            background: rgba(254, 0, 0, 1);
+            color: #fff;
+        }
+    }
+}
+
+.item-card:hover .overlay {
+    opacity: 1;
+}
+
+
+
+
+
+
+
+.modal-overlay-delete {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+}
+
+.modal-box-delete {
+    background: white;
+    max-width: 928px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    padding: 60px 120px;
+
+    p {
+        font-weight: 600;
+        font-size: 18px;
+        line-height: 100%;
+        letter-spacing: 0%;
+        text-transform: uppercase;
+        color: rgba(0, 0, 0, 1);
+
+    }
+}
+
+.modal-text-delete {
+    font-weight: bold;
+    font-size: 18px;
+    text-transform: uppercase;
+}
+
+.modal-buttons-delete {
+    gap: 20px;
+}
+
+.modal-btn-delete {
+    background-color: #ffb400;
+    color: white;
+    padding: 10px 30px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    width: 120px;
+}
+
+.modal-btn-delete:hover {
+    background-color: #e0a200;
+    color: white;
+}
+
+.pagination-container {
+    margin-top: 30px;
+}
+
+.pagination-btn {
+    width: 60px;
+    height: 60px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.pagination-btn.active {
+    background-color: #ffb400;
+    color: white;
+    font-weight: bold;
+}
+
+.pagination-btn:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.pagination-ellipsis {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    line-height: 40px;
+    text-align: center;
+    color: #999;
+    font-weight: bold;
+    font-size: 18px;
+}
+
+.btn-arrow {
+    width: 60px;
+    height: 60px;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+}
+
+.loading-container {
+    height: 70vh;
+}
+
+.custom-spinner {
+    width: 3rem;
+    height: 3rem;
+    border-color: rgba(254, 175, 0, 0.2);
+    border-top-color: rgba(254, 175, 0, 1);
+}
+
+.toast-animate {
+    animation: fadeInOut 4s ease-in-out forwards;
+    -webkit-animation: fadeInOut 4s ease-in-out forwards;
+}
+
+@keyframes fadeInOut {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    10% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    90% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+}
+
+@media (max-width:768px) {
+    .all-items {
+        justify-content: center;
+
+        .item-card {
+            width: 100%;
+            height: auto;
+        }
+    }
+}
+
+@media (max-width:540px) {
+
+    .pagination-btn,
+    .btn-arrow {
+        width: 40px;
+        height: 40px;
+    }
+
+}
