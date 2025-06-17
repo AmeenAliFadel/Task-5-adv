@@ -1,29 +1,44 @@
 import './ShowItems.css';
 import searchIcon from '../../assets/search.svg';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import axios from 'axios';
-import defaultImage from '../../assets/image.png';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Spinner } from 'react-bootstrap';
+import ProductCard from './ProductCard';
+import ConfirmPopup from '../ConfirmLogout/ConfirmPopup';
+
+interface Product {
+    id: string;
+    name: string;
+    image_url: string;
+}
 
 export default function ShowItems() {
     const navigate = useNavigate();
-    const [products, setProducts] = useState<any[]>([]);
+    const [products, setProducts] = useState<Product[]>([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState<string | null>(null);
+
+    // State to hold the search query used for filtering
     const [search, setSearch] = useState('');
-    const [render, setrender] = useState(false);
+    // Ref to access the input element value without causing re-renders
+    const searchInputRef = useRef<HTMLInputElement | null>(null);
+
+    const [render, setRender] = useState(false);
     const [productToDelete, setProductToDelete] = useState<string | null>(null);
-    const [showdeletePopUp, setShowdeletePopUp] = useState(false);
+    const [showDeletePopup, setShowDeletePopup] = useState(false);
+    const [deleteLoading, setDeleteLoading] = useState(false);
+
     const [currentPage, setCurrentPage] = useState(1);
     const itemsPerPage = 8;
 
-    // Toast states
     const [showToast, setShowToast] = useState(false);
     const [toastMessage, setToastMessage] = useState('');
 
+    // Navigate to add product page
     const goToAdd = () => navigate('/route/products/additem');
 
+    // Fetch products from API when component mounts or render toggles
     useEffect(() => {
         const fetchProduct = async () => {
             try {
@@ -31,9 +46,7 @@ export default function ShowItems() {
                 setError(null);
                 const token = localStorage.getItem('token');
                 const res = await axios.get("https://web-production-3ca4c.up.railway.app/api/items", {
-                    headers: {
-                        Authorization: `Bearer ${token}`,
-                    },
+                    headers: { Authorization: `Bearer ${token}` }
                 });
                 setProducts(res.data);
             } catch (error) {
@@ -46,6 +59,7 @@ export default function ShowItems() {
         fetchProduct();
     }, [render]);
 
+    // Filter products based on current search query
     const filteredProducts = products.filter(product =>
         product.name.toLowerCase().includes(search.toLowerCase())
     );
@@ -55,33 +69,43 @@ export default function ShowItems() {
     const endIndex = startIndex + itemsPerPage;
     const currentItems = filteredProducts.slice(startIndex, endIndex);
 
+    // Reset current page if filtering reduces the total pages and currentPage is invalid
     useEffect(() => {
         if (currentPage > totalPages && totalPages !== 0) {
             setCurrentPage(1);
         }
-    }, [search, filteredProducts]);
+    }, [search, filteredProducts, currentPage, totalPages]);
 
+    // Handle delete popup showing
+    const handleDeleteRequest = (id: string) => {
+        setProductToDelete(id);
+        setShowDeletePopup(true);
+    };
+
+    // Handle product deletion with loading state and toast feedback
     const handleDeleteProduct = async () => {
         if (!productToDelete) return;
         try {
+            setDeleteLoading(true);
             const token = localStorage.getItem('token');
             await axios.delete(`https://web-production-3ca4c.up.railway.app/api/items/${productToDelete}`, {
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
+                headers: { Authorization: `Bearer ${token}` }
             });
+            // Remove deleted product from the list without refetching
             setProducts(products.filter(product => product.id !== productToDelete));
             setToastMessage('Product deleted successfully!');
             setShowToast(true);
         } catch (error) {
             console.error('Failed to delete product:', error);
         } finally {
-            setShowdeletePopUp(false);
+            setDeleteLoading(false);
+            setShowDeletePopup(false);
             setProductToDelete(null);
-            setrender(!render);
+            setRender(!render); // trigger refetch if needed
         }
     };
 
+    // Auto-hide toast after 3 seconds
     useEffect(() => {
         if (showToast) {
             const timer = setTimeout(() => setShowToast(false), 3000);
@@ -89,6 +113,7 @@ export default function ShowItems() {
         }
     }, [showToast]);
 
+    // Generate visible pagination numbers with ellipsis (...)
     const getVisiblePageNumbers = () => {
         const pageNumbers: (number | string)[] = [];
         const left = Math.max(2, currentPage - 1);
@@ -105,6 +130,28 @@ export default function ShowItems() {
         return pageNumbers;
     };
 
+    // Handle clicking the search button or pressing enter
+    const handleSearch = () => {
+        const query = searchInputRef.current?.value.trim() || '';
+        setSearch(query);
+    };
+
+    // Handle input changes for search box
+    // If input is cleared (empty), reset search to show all products
+    const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        if (e.target.value === '') {
+            setSearch('');
+        }
+    };
+
+    // Handle enter key for triggering search
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            handleSearch();
+        }
+    };
+
     if (loading) {
         return (
             <div className="d-flex justify-content-center align-items-center loading-container mt-5">
@@ -113,6 +160,7 @@ export default function ShowItems() {
             </div>
         );
     }
+
     if (error) return <div>{error}</div>;
 
     return (
@@ -123,10 +171,11 @@ export default function ShowItems() {
                     type="text"
                     className="form-control border-0"
                     placeholder="Search product by name"
-                    value={search}
-                    onChange={(e) => setSearch(e.target.value)}
+                    ref={searchInputRef}
+                    onChange={handleInputChange}
+                    onKeyDown={handleKeyDown}
                 />
-                <button className="btn">
+                <button className="btn" onClick={handleSearch}>
                     <img src={searchIcon} alt="Search icon" />
                 </button>
             </div>
@@ -134,49 +183,27 @@ export default function ShowItems() {
             {/* Add Product Button */}
             <div className="container">
                 <div className="d-flex justify-content-end mt-5">
-                    <button className="btn add-btn btn-warning text-white px-4 py-3 fw-semibold" onClick={goToAdd}>
+                    <button
+                        className="btn add-btn btn-warning text-white px-4 py-3 fw-semibold"
+                        onClick={goToAdd}
+                    >
                         ADD NEW PRODUCT
                     </button>
                 </div>
 
                 {/* Product Grid */}
-                <div className="all-items d-flex mx-5 flex-wrap mt-3">
+                <div className="all-items d-flex justify-content-center justify-content-xl-start mx-5 flex-wrap mt-3">
                     {currentItems.length === 0 ? (
                         <p>No products found.</p>
                     ) : (
                         currentItems.map((product) => (
-                            <div key={product.id} className="item-card rounded">
-                                <img
-                                    className="rounded w-100 h-100"
-                                    src={product.image_url}
-                                    alt={product.name}
-                                    onError={(e) => {
-                                        (e.target as HTMLImageElement).src = defaultImage;
-                                    }}
-                                />
-                                <div className="overlay w-100 h-100 d-flex align-items-center justify-content-center flex-column">
-                                    <Link className='btn' to={`/route/products/showitem/${product?.id}`} >
-                                        <h5>{product.name}</h5>
-                                    </Link>
-
-                                    <div className="buttons d-flex align-items-center justify-content-center gap-2">
-                                        <Link
-                                            className="btn edit-btn btn-warning text-white rounded"
-                                            to={`/route/products/edititem/${product?.id}`}>
-                                            Edit
-                                        </Link>
-                                        <button
-                                            className="btn delete-btn rounded"
-                                            onClick={() => {
-                                                setProductToDelete(product.id);
-                                                setShowdeletePopUp(true);
-                                            }}
-                                        >
-                                            Delete
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
+                            <ProductCard
+                                key={product.id}
+                                id={product.id}
+                                name={product.name}
+                                image_url={product.image_url}
+                                onDelete={handleDeleteRequest}
+                            />
                         ))
                     )}
                 </div>
@@ -191,21 +218,25 @@ export default function ShowItems() {
                         >
                             &lt;
                         </button>
-
                         {getVisiblePageNumbers().map((page, index) =>
                             typeof page === 'number' ? (
                                 <button
                                     key={index}
-                                    className={`btn pagination-btn rounded-circle px-3 py-1 ${currentPage === page ? 'btn-warning text-white fw-bold' : 'btn-light'}`}
+                                    className={`btn pagination-btn rounded-circle px-3 py-1 ${currentPage === page ? 'btn-warning text-white fw-bold' : 'btn-light'
+                                        }`}
                                     onClick={() => setCurrentPage(page)}
                                 >
                                     {page}
                                 </button>
                             ) : (
-                                <span key={index} className="d-flex align-items-center justify-content-center px-2">...</span>
+                                <span
+                                    key={index}
+                                    className="d-flex align-items-center justify-content-center px-2"
+                                >
+                                    ...
+                                </span>
                             )
                         )}
-
                         <button
                             className="btn btn-arrow rounded-circle px-3 py-1"
                             disabled={currentPage === totalPages}
@@ -217,17 +248,14 @@ export default function ShowItems() {
                 )}
             </div>
 
-            {/* Delete Modal */}
-            {showdeletePopUp && (
-                <div className="modal-overlay-delete d-flex justify-content-center align-items-center">
-                    <div className="modal-box-delete bg-white shadow-lg rounded text-center ">
-                        <p className="mb-5">Are you sure you want to delete this product?</p>
-                        <div className="d-flex justify-content-between gap-3">
-                            <button className="btn modal-btn-delete" onClick={handleDeleteProduct}>Yes</button>
-                            <button className="btn modal-btn-delete" onClick={() => setShowdeletePopUp(false)}>No</button>
-                        </div>
-                    </div>
-                </div>
+            {/* Delete Confirmation Popup */}
+            {showDeletePopup && (
+                <ConfirmPopup
+                    message="Are you sure you want to delete this product?"
+                    onConfirm={handleDeleteProduct}
+                    onCancel={() => setShowDeletePopup(false)}
+                    loading={deleteLoading}
+                />
             )}
 
             {/* Toast Message */}
@@ -243,9 +271,7 @@ export default function ShowItems() {
                         aria-atomic="true"
                     >
                         <div className="d-flex align-items-center">
-                            <div className="toast-body fs-5 fw-semibold">
-                                {toastMessage}
-                            </div>
+                            <div className="toast-body fs-5 fw-semibold">{toastMessage}</div>
                             <button
                                 type="button"
                                 className="btn-close btn-close-white ms-3"

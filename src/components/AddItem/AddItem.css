@@ -20,8 +20,9 @@
     margin-top: 36px;
 
 }
-.Af-add-button{
-     background: rgba(254, 175, 0, 1);
+
+.Af-add-button {
+    background: rgba(254, 175, 0, 1);
     font-weight: 500;
     font-size: 13px;
     line-height: 100%;
@@ -29,7 +30,22 @@
     color: rgba(255, 255, 255, 1);
     padding: 11px 0;
     width: 200px;
+    transition: background-color 0.3s ease;
 }
+
+.Af-add-button:hover {
+    background-color: rgb(205, 141, 2);
+}
+
+.Af-add-button:active,
+.Af-add-button:focus,
+.Af-add-button:disabled {
+    background-color: rgb(205, 141, 3) !important;
+    box-shadow: none !important;
+    border-color: transparent;
+    outline: none;
+}
+
 .price-input {
     margin-top: 5rem;
 }
@@ -40,4 +56,19 @@
     line-height: 100%;
     letter-spacing: 0%;
     color: rgba(108, 108, 108, 1);
+}
+
+@media (max-width:768px) {
+    .add-sides {
+        width: 100% !important;
+    }
+
+    .price-input {
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .add-item h2 {
+        font-size: 35px;
+    }
 }

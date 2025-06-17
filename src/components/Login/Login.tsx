@@ -8,22 +8,21 @@ import axios from 'axios';
 import { Spinner } from 'react-bootstrap';
 import { Toast, ToastContainer } from 'react-bootstrap';
 
-
 export default function Login() {
-    const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
-    const emailRef = useRef<HTMLInputElement | null>(null);
-    const passwordRef = useRef<HTMLInputElement | null>(null);
+    const navigate = useNavigate(); // Hook to navigate programmatically
+    const [loading, setLoading] = useState(false); // Loading state for spinner
+    const emailRef = useRef<HTMLInputElement | null>(null); // Ref for email input
+    const passwordRef = useRef<HTMLInputElement | null>(null); // Ref for password input
 
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
+    const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Form validation errors
 
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
-    const [toastVariant, setToastVariant] = useState<'success' | 'danger'>('success');
+    const [showToast, setShowToast] = useState(false); // Toast visibility state
+    const [toastMessage, setToastMessage] = useState(''); // Toast message content
+    const [toastVariant, setToastVariant] = useState<'success' | 'danger'>('success'); // Toast type (color)
 
+    const emailRegex = /^\S+@\S+\.\S+$/; // Simple email validation regex
 
-    const emailRegex = /^\S+@\S+\.\S+$/;
-
+    // Function to validate form inputs
     const validateForm = () => {
         const email = emailRef.current?.value.trim() || '';
         const password = passwordRef.current?.value.trim() || '';
@@ -39,49 +38,57 @@ export default function Login() {
             newErrors.password = 'Password is required';
         }
 
-        setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        setErrors(newErrors); // Set validation errors
+        return Object.keys(newErrors).length === 0; // Return true if no errors
     };
 
+    // Handle form submission
     const handleLogin = async (e: React.FormEvent) => {
-        e.preventDefault();
+        e.preventDefault(); // Prevent default form submission
 
-        if (!validateForm()) return;
+        if (!validateForm()) return; // Stop if validation fails
 
         const email = emailRef.current?.value.trim() || '';
         const password = passwordRef.current?.value.trim() || '';
-        setLoading(true);
+        setLoading(true); // Show loading spinner
 
         try {
+            // Send login request to backend API
             const response = await axios.post('https://web-production-3ca4c.up.railway.app/api/login', {
                 email,
                 password
             });
 
+            // Extract data from response
             const token = response.data.token;
             const userName = response.data.user.user_name;
             const profileImage = response.data.user.profile_image_url;
 
+            // Store user data in localStorage
             localStorage.setItem('token', token);
             localStorage.setItem('user_name', userName);
             localStorage.setItem('profile_image', profileImage);
 
+            // Show success toast
             setToastVariant('success');
             setToastMessage('Login successful!');
             setShowToast(true);
 
+            // Navigate to products page after short delay
             setTimeout(() => {
                 navigate('/route/products');
             }, 1500);
 
         } catch (error: any) {
+            // Show error toast if login fails
             setToastVariant('danger');
             setToastMessage('Email or password is incorrect');
             setShowToast(true);
         } finally {
-            setLoading(false);
+            setLoading(false); // Hide loading spinner
         }
     };
+
     return (
         <>
             <div className="form d-flex justify-content-center align-items-center w-100 min-vh-100">
@@ -96,7 +103,7 @@ export default function Login() {
                                 ref={emailRef}
                                 type="email"
                                 placeholder="Enter your email"
-                                isInvalid={!!errors.email}
+                                isInvalid={!!errors.email} // Highlight if error exists
                                 className="py-3 small"
                             />
                             <Form.Control.Feedback type="invalid">
@@ -110,7 +117,7 @@ export default function Login() {
                                 ref={passwordRef}
                                 type="password"
                                 placeholder="Enter your password"
-                                isInvalid={!!errors.password}
+                                isInvalid={!!errors.password} // Highlight if error exists
                                 className="py-3 small"
                             />
                             <Form.Control.Feedback type="invalid">
@@ -124,6 +131,7 @@ export default function Login() {
                             disabled={loading}
                         >
                             {loading ? (
+                                // Show spinner while submitting
                                 <>
                                     <Spinner animation="border" size="sm" className="me-2" />
                                     Signing in...
@@ -151,7 +159,6 @@ export default function Login() {
                     <Toast.Body className="text-white">{toastMessage}</Toast.Body>
                 </Toast>
             </ToastContainer>
-
         </>
     );
 }

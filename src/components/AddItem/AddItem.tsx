@@ -2,41 +2,53 @@ import { useNavigate } from 'react-router-dom';
 import arrow from '../../assets/arrow.svg';
 import './AddItem.css';
 import UploadIcon from '../../assets/upload.png';
-import { Button, Form } from 'react-bootstrap';
+import { Button, Form, Spinner } from 'react-bootstrap';
 import { useRef, useState } from 'react';
 import axios from 'axios';
 
 export default function AddItem() {
     const navigate = useNavigate();
+
+    // Refs for form fields
     const nameRef = useRef<HTMLInputElement | null>(null);
     const priceRef = useRef<HTMLInputElement | null>(null);
     const fileInputRef = useRef<HTMLInputElement | null>(null);
 
+    // State for image preview and uploaded file
     const [previewImage, setPreviewImage] = useState<string | null>(null);
     const [profileImage, setProfileImage] = useState<File | null>(null);
 
+    // State for submit button loading
+    const [isSubmitting, setIsSubmitting] = useState<boolean>(false);
+
+    // State for form errors
     const [errors, setErrors] = useState<{ name?: string; price?: string; image?: string }>({});
 
+    // Handle go back button
     const goBack = () => {
         navigate('/route/products');
     };
 
+    // Handle image file selection and preview
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
             const imageUrl = URL.createObjectURL(file);
             setPreviewImage(imageUrl);
             setProfileImage(file);
-            setErrors(prev => ({ ...prev, image: undefined }));
+            setErrors(prev => ({ ...prev, image: undefined })); // Clear image error if any
         }
     };
 
+    // Handle form submit
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
+        // Get form values
         const name = nameRef.current?.value.trim() || '';
         const price = priceRef.current?.value.trim() || '';
 
+        // Validate fields
         const newErrors: typeof errors = {};
 
         if (!name) newErrors.name = 'Name is required.';
@@ -46,12 +58,15 @@ export default function AddItem() {
 
         setErrors(newErrors);
 
+        // If there are validation errors, stop submission
         if (Object.keys(newErrors).length > 0) return;
 
+        // Prepare form data for request
         const data = new FormData();
         data.append('name', name);
         data.append('price', price);
         data.append('image', profileImage!);
+        setIsSubmitting(true);
 
         try {
             const token = localStorage.getItem('token');
@@ -67,21 +82,27 @@ export default function AddItem() {
             );
 
             console.log("Item added successfully");
-            navigate('/route/products');
-
+            navigate('/route/products'); // Navigate back after successful submission
 
         } catch (error: any) {
+            // Handle server errors
             if (axios.isAxiosError(error)) {
                 console.log("Server error:", error.response?.data);
-                setErrors(prev => ({ ...prev, image: error.response?.data?.errors?.image?.[0] || 'Upload failed.' }));
+                setErrors(prev => ({
+                    ...prev,
+                    image: error.response?.data?.errors?.image?.[0] || 'Upload failed.'
+                }));
             } else {
                 console.log(error);
             }
+        } finally {
+            setIsSubmitting(false);
         }
     };
 
     return (
         <>
+            {/* Header section with go back button */}
             <div className="add-item">
                 <button onClick={goBack} className="goback-btn btn d-flex justify-content-center align-items-center">
                     <img src={arrow} alt="" />
@@ -89,9 +110,11 @@ export default function AddItem() {
                 <h2>ADD NEW ITEM</h2>
             </div>
 
+            {/* Form */}
             <Form onSubmit={handleSubmit} className="d-flex add-page flex-column justify-content-center mt-5 w-100">
-                <div className="d-flex gap-3">
-                    <div className="w-50 gap-3">
+                <div className="d-flex flex-wrap flex-md-nowrap gap-3">
+                    {/* Name and Price inputs */}
+                    <div className="add-sides w-50 gap-3">
                         <Form.Group className="mb-3 w-100">
                             <Form.Label>Name</Form.Label>
                             <Form.Control
@@ -119,10 +142,11 @@ export default function AddItem() {
                         </Form.Group>
                     </div>
 
-                    <Form.Group className="w-50 mb-3">
+                    {/* Image upload */}
+                    <Form.Group className="add-sides w-50 mb-3">
                         <Form.Label>Profile Picture</Form.Label>
                         <div
-                            className={`custom-upload-box custom-upload-box-edit w-100 ${errors.image ? 'border border-danger' : ''}`}
+                            className={`custom-upload-box custom-upload-box-edit d-flex justify-content-center align-items-center w-100 ${errors.image ? 'border border-danger' : ''}`}
                             onClick={() => fileInputRef.current?.click()}
                         >
                             {previewImage ? (
@@ -142,8 +166,23 @@ export default function AddItem() {
                     </Form.Group>
                 </div>
 
-                <Button className="Af-add-button border-0 mt-3 mx-auto" type="submit">
-                    Save
+                {/* Submit button */}
+                <Button className="Af-add-button border-0 mt-3 mx-auto" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? (
+                        <>
+                            <Spinner
+                                as="span"
+                                animation="border"
+                                size="sm"
+                                role="status"
+                                aria-hidden="true"
+                                className="me-2"
+                            />
+                            Loading...
+                        </>
+                    ) : (
+                        "Save"
+                    )}
                 </Button>
             </Form>
         </>

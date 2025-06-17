@@ -1,3 +1,49 @@
+.edit-item .goback-btn {
+    border: 1px solid rgba(0, 0, 0, 1);
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 1);
+}
+
+.edit-item .goback-btn:hover {
+    border: 1px solid rgba(0, 0, 0, 1) !important;
+}
+
+.edit-item h2 {
+    font-weight: 600;
+    font-size: 60px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    text-transform: uppercase;
+    color: rgba(0, 0, 0, 1);
+    margin-top: 36px;
+
+}
+
+.Af-edit-button {
+    background: rgba(254, 175, 0, 1);
+    font-weight: 500;
+    font-size: 13px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(255, 255, 255, 1);
+    padding: 11px 0;
+    width: 200px;
+}
+
+.price-input {
+    margin-top: 5rem;
+}
+
+.edit-page .form-label {
+    font-weight: 500;
+    font-size: 32px;
+    line-height: 100%;
+    letter-spacing: 0%;
+    color: rgba(108, 108, 108, 1);
+}
+
 .custom-upload-box-edit {
     height: 208px;
 }
@@ -18,6 +64,7 @@
     letter-spacing: 0%;
     color: rgba(108, 108, 108, 1);
 }
+
 .loading-container {
     height: 70vh;
 }
@@ -28,19 +75,36 @@
     border-color: rgba(254, 175, 0, 0.2);
     border-top-color: rgba(254, 175, 0, 1);
 }
-.Af-add-button {
-  color: #fff;
-  transition: background-color 0.3s ease;
+
+.Af-edit-button {
+    color: #fff;
+    transition: background-color 0.3s ease;
 }
 
-.Af-add-button:hover {
+.Af-edit-button:hover {
     background-color: rgb(205, 141, 2);
 }
 
-.Af-add-button:active,
-.Af-add-button:focus {
-  background-color: rgb(205, 141, 3) !important;
-  box-shadow: none !important;
-  border-color: transparent;
-  outline: none;
+.Af-edit-button:active,
+.Af-edit-button:focus,
+.Af-edit-button:disabled {
+    background-color: rgb(205, 141, 3) !important;
+    box-shadow: none !important;
+    border-color: transparent;
+    outline: none;
+}
+
+@media (max-width:768px) {
+    .edit-sides {
+        width: 100% !important;
+    }
+
+    .price-input {
+        margin-top: 3rem;
+        margin-bottom: 3rem;
+    }
+
+    .edit-item h2 {
+        font-size: 48px;
+    }
 }

@@ -64,24 +64,25 @@ body {
   background: rgba(254, 175, 0, 1);
   border-radius: 4px;
 }
+
 .toggle-sidebar-btn {
   background-color: rgba(254, 175, 0, 1);
   color: white;
   font-size: 24px;
   border-radius: 8px;
   padding: 4px 12px;
-  border: 1px solid #e0e0e0 !important; /* ✅ أضف هذا السطر للبوردر */
+  border: 1px solid #e0e0e0 !important;
   transition: all 0.3s ease;
 }
 
 .toggle-sidebar-btn:hover {
   background-color: rgba(230, 150, 0, 1);
-  border-color: rgba(230, 150, 0, 1); /* ✅ لتغيير لون البوردر مع الهوفر */
+  border-color: rgba(230, 150, 0, 1);
 }
 
 .toggle-sidebar-btn.open {
   background-color: rgba(200, 80, 80, 1);
-  border-color: rgba(200, 80, 80, 1); /* ✅ لون البوردر عند الفتح */
+  border-color: rgba(200, 80, 80, 1);
 }
 
 .route-outlet {

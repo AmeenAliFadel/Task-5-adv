@@ -70,12 +70,6 @@
     opacity: 1;
 }
 
-
-
-
-
-
-
 .modal-overlay-delete {
     position: fixed;
     top: 0;
@@ -183,8 +177,8 @@
 }
 
 .toast-animate {
-    animation: fadeInOut 4s ease-in-out forwards;
     -webkit-animation: fadeInOut 4s ease-in-out forwards;
+    animation: fadeInOut 4s ease-in-out forwards;
 }
 
 @keyframes fadeInOut {
@@ -211,8 +205,6 @@
 
 @media (max-width:768px) {
     .all-items {
-        justify-content: center;
-
         .item-card {
             width: 100%;
             height: auto;

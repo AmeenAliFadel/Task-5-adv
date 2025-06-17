@@ -1,5 +1,4 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import './Products.css';
 import ShowItems from '../../components/ShowItems/ShowItems';
 
 export default function Products() {

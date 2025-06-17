@@ -4,7 +4,6 @@ import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import Login from './components/Login/Login.tsx';
 import SignUp from './components/SignUp/SignUp.tsx';
-import Route from './Route.tsx';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import Products from './pages/Products/Products.tsx';
 import Favorites from './pages/Favorites/Favorites.tsx';
@@ -13,6 +12,7 @@ import ShowItems from './components/ShowItems/ShowItems.tsx';
 import AddItem from './components/AddItem/AddItem.tsx';
 import EditItem from './components/EditItem/EditItem.tsx';
 import ShowItem from './components/ShowItem/ShowItem.tsx';
+import Dashboard from './Dashboard.tsx';
 
 const routes = createBrowserRouter([
   {
@@ -25,26 +25,26 @@ const routes = createBrowserRouter([
   },
   {
     path: "route",
-    element: <Route />, 
+    element: <Dashboard />,
     children: [
       {
         path: "products",
         element: <Products />,
-        children:[
+        children: [
           {
             path: "showitems",
             element: <ShowItems />
           },
           {
-            path:"additem",
+            path: "additem",
             element: <AddItem />
           },
           {
-            path:"edititem/:id",
+            path: "edititem/:id",
             element: <EditItem />
           },
           {
-            path:"showitem/:id",
+            path: "showitem/:id",
             element: <ShowItem />
           }
         ]

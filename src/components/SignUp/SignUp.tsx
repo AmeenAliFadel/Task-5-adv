@@ -10,29 +10,34 @@ import { Toast, ToastContainer } from 'react-bootstrap';
 
 export default function SignUp() {
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(false);
+    const [loading, setLoading] = useState(false); // Loading state
 
+    // References for form fields
     const firstNameRef = useRef<HTMLInputElement | null>(null);
     const lastNameRef = useRef<HTMLInputElement | null>(null);
     const emailRef = useRef<HTMLInputElement | null>(null);
     const passwordRef = useRef<HTMLInputElement | null>(null);
     const passwordConfirmationRef = useRef<HTMLInputElement | null>(null);
-    const [profileImage, setProfileImage] = useState<File | null>(null);
-    const fileInputRef = useRef<HTMLInputElement | null>(null);
-    const [previewImage, setPreviewImage] = useState<string | null>(null);
-    const [errors, setErrors] = useState<{ [key: string]: string }>({});
-    const [showToast, setShowToast] = useState(false);
-    const [toastMessage, setToastMessage] = useState('');
 
+    const [profileImage, setProfileImage] = useState<File | null>(null); // Store selected profile image
+    const fileInputRef = useRef<HTMLInputElement | null>(null); // Reference for file input
+    const [previewImage, setPreviewImage] = useState<string | null>(null); // Preview image URL
+
+    const [errors, setErrors] = useState<{ [key: string]: string }>({}); // Form validation errors
+    const [showToast, setShowToast] = useState(false); // Toast visibility
+    const [toastMessage, setToastMessage] = useState(''); // Toast message
+
+    // Handle image file selection
     const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
         if (file) {
-            const imageUrl = URL.createObjectURL(file);
+            const imageUrl = URL.createObjectURL(file); // Create preview URL
             setPreviewImage(imageUrl);
             setProfileImage(file);
         }
     };
 
+    // Validate form fields before submit
     const validateForm = () => {
         const newErrors: { [key: string]: string } = {};
         const emailRegex = /^\S+@\S+\.\S+$/;
@@ -60,15 +65,15 @@ export default function SignUp() {
         }
 
         setErrors(newErrors);
-        return Object.keys(newErrors).length === 0;
+        return Object.keys(newErrors).length === 0; // Return true if no errors
     };
 
+    // Handle form submit
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-
-        // setServerError(null); // clear server error before submit
         if (!validateForm()) return;
 
+        // Collect form values
         const firstName = firstNameRef.current?.value || '';
         const lastName = lastNameRef.current?.value || '';
         const email = emailRef.current?.value || '';
@@ -76,7 +81,7 @@ export default function SignUp() {
         const passwordConfirmation = passwordConfirmationRef.current?.value || '';
         const userName = `${firstName}_${lastName}`;
 
-        const data = new FormData();
+        const data = new FormData(); // Prepare FormData for multipart request
         data.append('first_name', firstName);
         data.append('last_name', lastName);
         data.append('user_name', userName);
@@ -86,8 +91,10 @@ export default function SignUp() {
         if (profileImage) {
             data.append('profile_image', profileImage);
         }
+
         setLoading(true);
         try {
+            // Send POST request to register
             const response = await axios.post(
                 'https://web-production-3ca4c.up.railway.app/api/register',
                 data,
@@ -98,7 +105,7 @@ export default function SignUp() {
             localStorage.setItem('token', token);
             localStorage.setItem('user_name', userName);
 
-            // Clear form
+            // Clear form fields after success
             if (firstNameRef.current) firstNameRef.current.value = '';
             if (lastNameRef.current) lastNameRef.current.value = '';
             if (emailRef.current) emailRef.current.value = '';
@@ -107,7 +114,7 @@ export default function SignUp() {
             setPreviewImage(null);
             setProfileImage(null);
 
-            // Store profile image
+            // Convert image to base64 and store in localStorage (optional)
             if (profileImage) {
                 const reader = new FileReader();
                 reader.onloadend = () => {
@@ -122,6 +129,7 @@ export default function SignUp() {
             }
 
         } catch (err: any) {
+            // Handle error response
             const message = err.response?.data?.message || 'An error occurred. Please try again.';
             setToastMessage(message);
             setShowToast(true);
@@ -129,6 +137,7 @@ export default function SignUp() {
             setLoading(false);
         }
     };
+
     return (
         <>
             <div className="form d-flex justify-content-center align-items-center w-100 min-vh-100">
@@ -137,14 +146,15 @@ export default function SignUp() {
                     <h1>Sign up</h1>
                     <p>Fill in the following fields to create an account.</p>
 
-
                     <Form onSubmit={handleSubmit} className="w-100">
                         <div className="d-flex gap-3">
+                            {/* First name input */}
                             <Form.Group className="mb-3 w-100">
                                 <Form.Label>First Name</Form.Label>
                                 <Form.Control className="py-3 small" type="text" placeholder="First Name" ref={firstNameRef} />
                                 {errors.firstName && <p className="text-danger">{errors.firstName}</p>}
                             </Form.Group>
+                            {/* Last name input */}
                             <Form.Group className="mb-3 w-100">
                                 <Form.Label>Last Name</Form.Label>
                                 <Form.Control className="py-3 small" type="text" placeholder="Last Name" ref={lastNameRef} />
@@ -152,6 +162,7 @@ export default function SignUp() {
                             </Form.Group>
                         </div>
 
+                        {/* Email input */}
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>
                             <Form.Control className="py-3 small" type="email" placeholder="Enter your email" ref={emailRef} />
@@ -159,11 +170,13 @@ export default function SignUp() {
                         </Form.Group>
 
                         <div className="d-flex gap-3">
+                            {/* Password input */}
                             <Form.Group className="mb-3 w-100">
                                 <Form.Label>Password</Form.Label>
                                 <Form.Control className="py-3 small" type="password" placeholder="Enter password" ref={passwordRef} />
                                 {errors.password && <p className="text-danger">{errors.password}</p>}
                             </Form.Group>
+                            {/* Confirm password input */}
                             <Form.Group className="mb-3 w-100">
                                 <Form.Label>Confirm Password</Form.Label>
                                 <Form.Control className="py-3 small" type="password" placeholder="Re-enter your password" ref={passwordConfirmationRef} />
@@ -171,6 +184,7 @@ export default function SignUp() {
                             </Form.Group>
                         </div>
 
+                        {/* Profile picture upload */}
                         <Form.Group className="mb-3">
                             <Form.Label>Profile Picture</Form.Label>
                             <div className="custom-upload-box border  rounded d-flex justify-content-center align-items-center" onClick={() => fileInputRef.current?.click()}>
@@ -189,6 +203,7 @@ export default function SignUp() {
                             />
                         </Form.Group>
 
+                        {/* Submit button */}
                         <Button className="Af-form-button btn-warning border-0 mt-3 w-100 py-3 fw-medium text-white" type="submit" disabled={loading}>
                             {loading ? (
                                 <>
@@ -206,8 +221,6 @@ export default function SignUp() {
                                 'SIGN UP'
                             )}
                         </Button>
-
-
                     </Form>
 
                     <p className="text-secondary small mt-3">
@@ -215,26 +228,16 @@ export default function SignUp() {
                     </p>
                 </div>
             </div>
-            <ToastContainer
-                position="top-center"
-                className="p-3"
-            >
-                <Toast
-                    bg="danger"
-                    show={showToast}
-                    onClose={() => setShowToast(false)}
-                    delay={3000}
-                    autohide
-                >
+
+            {/* Toast message for errors */}
+            <ToastContainer position="top-center" className="p-3">
+                <Toast bg="danger" show={showToast} onClose={() => setShowToast(false)} delay={3000} autohide>
                     <Toast.Header closeButton={false}>
                         <strong className="me-auto">Error</strong>
                     </Toast.Header>
                     <Toast.Body className="text-white">{toastMessage}</Toast.Body>
                 </Toast>
             </ToastContainer>
-
-
         </>
-
     );
 }
