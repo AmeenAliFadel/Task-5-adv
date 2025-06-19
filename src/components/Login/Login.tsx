@@ -95,7 +95,7 @@ export default function Login() {
                 <div className="Af-form-container d-flex align-items-center flex-column bg-white">
                     <img src={Logo} alt="" />
                     <h1 className='text-uppercase fw-semibold fs-4'>Sign In</h1>
-                    <p className='text-secondary small'>Enter your credentials to access your account</p>
+                    <p className='text-secondary text-center small'>Enter your credentials to access your account</p>
                     <Form className='w-100' onSubmit={handleLogin}>
                         <Form.Group className="mb-3">
                             <Form.Label>Email</Form.Label>

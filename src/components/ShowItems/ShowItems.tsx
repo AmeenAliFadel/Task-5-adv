@@ -182,7 +182,7 @@ export default function ShowItems() {
 
             {/* Add Product Button */}
             <div className="container">
-                <div className="d-flex justify-content-end mt-5">
+                <div className="d-flex justify-content-center justify-content-sm-end mt-5">
                     <button
                         className="btn add-btn btn-warning text-white px-4 py-3 fw-semibold"
                         onClick={goToAdd}

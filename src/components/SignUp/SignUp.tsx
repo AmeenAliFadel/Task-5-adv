@@ -143,8 +143,8 @@ export default function SignUp() {
             <div className="form d-flex justify-content-center align-items-center w-100 min-vh-100">
                 <div className="Af-form-container d-flex align-items-center flex-column bg-white">
                     <img src={Logo} alt="Logo" />
-                    <h1>Sign up</h1>
-                    <p>Fill in the following fields to create an account.</p>
+                    <h1 className='text-uppercase fw-semibold fs-4'>Sign up</h1>
+                    <p className='text-secondary text-center small'>Fill in the following fields to create an account.</p>
 
                     <Form onSubmit={handleSubmit} className="w-100">
                         <div className="d-flex gap-3">

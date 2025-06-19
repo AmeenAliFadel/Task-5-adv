@@ -59,10 +59,14 @@ const routes = createBrowserRouter([
       },
     ],
   },
-]);
+],
+  {
+    basename: "/Task-5-adv",  
+  }
+);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <RouterProvider router={routes} />
+    <RouterProvider router={routes}   />
   </StrictMode>,
 )
