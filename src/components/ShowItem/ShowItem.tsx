@@ -4,6 +4,7 @@ import './ShowItem.css';
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { Spinner } from "react-bootstrap";
+import defaultImage from '../../assets/image.png';
 
 // ShowItem component displays detailed information about a specific product
 export default function ShowItem() {
@@ -78,7 +79,14 @@ export default function ShowItem() {
 
                 {/* Product image */}
                 <div className="d-flex justify-content-center">
-                    <img className="show-img" src={productData.image_url} alt={productData.name} />
+                    <img
+                        className="show-img"
+                        src={productData.image_url}
+                        alt={productData.name}
+                        onError={(e) => {
+                            (e.target as HTMLImageElement).src = defaultImage;
+                        }}
+                    />
                 </div>
 
                 {/* Product price and added date */}

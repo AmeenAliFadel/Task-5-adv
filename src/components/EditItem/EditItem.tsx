@@ -6,6 +6,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 import './EditItem.css';
 import { Spinner, Toast, ToastContainer } from "react-bootstrap";
+import defaultImage from '../../assets/image.png';
 
 // EditItem component handles editing an existing product
 export default function EditItem() {
@@ -210,7 +211,13 @@ export default function EditItem() {
                             onClick={() => fileInputRef.current?.click()}
                         >
                             {previewImage ? (
-                                <img src={previewImage} alt="Preview" className="preview-image" />
+                                <img
+                                    src={previewImage}
+                                    alt="Preview"
+                                    className="preview-image"
+                                    onError={(e) => {
+                                        (e.target as HTMLImageElement).src = defaultImage;
+                                    }} />
                             ) : (
                                 <img src={UploadIcon} alt="Upload Icon" className="upload-icon" />
                             )}

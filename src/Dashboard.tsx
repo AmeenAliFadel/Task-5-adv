@@ -6,6 +6,7 @@ import logo2 from './assets/products.svg';
 import logo3 from './assets/bookmark.svg';
 import logoutIcon from './assets/logout.svg';
 import ConfirmPopup from './components/ConfirmLogout/ConfirmPopup';
+import profile from './assets/profile.png'
 
 export default function Dashboard() {
     const navigate = useNavigate();
@@ -62,6 +63,9 @@ export default function Dashboard() {
                                 className="profileImage rounded-circle mt-5"
                                 src={profileImage}
                                 alt="Profile"
+                                onError={(e) => {
+                                    (e.target as HTMLImageElement).src = profile;
+                                }}
                             />
                         )}
 
